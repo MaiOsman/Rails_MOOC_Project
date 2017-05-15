@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p class=" like btn-success" ><%= link_to like_lecture_path(@lecture), method: :put do %>
+    Like
+    <%= @lecture.get_upvotes.size %>
+<% end %>
+</p>
+
+<p class="spam btn-danger" >
+<%= link_to dislike_lecture_path(@lecture), method: :put do %>
+    Spam
+    <%= @lecture.get_downvotes.size %>
+<% end %>
+</p>
+<h1>
+  <strong>Course:</strong>
+  <%= @lecture.try(:course).try(:title) %>
+</h1>
+
+<p>
+  <strong>Content:</strong>
+  <%= raw @lecture.try(:content) %>
+</p>
+
+<% if current_user  %>
+  <p>
+    <strong>Attachment:</strong>
+    <td><%= link_to "Download lecture", @lecture.try(:attachment_url) %></td>
+  </p>
+
+  <h3> Add Comment</h3>
+    <%= render "comments/form" %>
+  </div>
+<% end %>
+
+<div id="comments">
+  <h3> <%= raw @lecture.comments.count %> comments</h3>
+  <p> <%= render "comments/comment" %> </p>
+
+  <% if current_user && current_user.instructor? && current_user.check_permision?(@lecture.course)%>
+    <%= link_to 'Edit', edit_lecture_path(@lecture) %> |
+  <% end %>

@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Courses</h1>
+<% if current_user && current_user.instructor? %>
+  <p class="btn btn-success new"><%= link_to 'New Course', new_course_path %></p>
+<% end %>
+<div class="row">
+  <% @courses.each do |course| %>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <div class="caption">
+            <h3><%= course.try(:title) %></h3>
+            <p>Made By : <%= course.try(:user).try(:name) %></p>
+            <p class="btn btn-primary"> <%= link_to 'Show Lectures', course%> </p>
+            <% if current_user && current_user.instructor? && current_user.check_permision?(course)%>
+              <p class="btn btn-warning"><%= link_to 'Edit', edit_course_path(course) %></td></p>
+              <p class="btn btn-danger"><%= link_to 'Delete', course, method: :delete, data: { confirm: 'Are you sure?' } %></td></p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
